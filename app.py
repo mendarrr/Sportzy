@@ -48,6 +48,9 @@ def main():
             click.echo(f" - {role}")
 
     if role_to_lowercase == "admin":
+
+        # Check Authentication
+
         admin_role = click.prompt(f"What kind of Manager are you {user_name}?\n"
             + "\n".join(f"  {choice}" for choice in ['Player Manager', 'Games Manager', 'Equipment Manager', 'Coach Manager']),
             type=click.Choice(['Player Manager', 'Games Manager', 'Equipment Manager', 'Coach Manager']),
@@ -61,12 +64,6 @@ def main():
     if admin_role == "Games Manager":
         conn = get_connection()
         cursor = conn.cursor()
-        # cursor.execute("""
-        #     CREATE TABLE IF NOT EXISTS games
-        #     (id INTEGER, game_name TEXT PRIMARY KEY, number_of_players INTEGER, coach_name TEXT, FOREIGN KEY(coach_name) REFERENCES coach(coach_name));
-        # """)
-        
-        # Add a new new game
         game_name = input("Enter game name: ")
         number_of_players = int(input("Enter number of players: "))
         coach_name = input("Enter coach name: ")
@@ -75,14 +72,46 @@ def main():
         conn.commit()
         game_id = cursor.lastrowid
         print(f"Game created successfully! Game ID: {game_id}")
+
     elif admin_role == "Player Manager":
-        # Add a new Game
+        # Add a new Player
+        conn = get_connection()
+        cursor = conn.cursor()
+        player_name = input("Enter player name: ")
+        year_of_birth = int(input("Enter your year of Birth: "))
+        gender = input("Enter your gender(F or M): ")
+        game_name = input("Enter game played: ")
+        cursor.execute("INSERT INTO players (player_name, year_of_birth, gender, game_name) VALUES (?,?,?,?)",
+                       (player_name, year_of_birth, gender, game_name))
+        conn.commit()
+        player_id = cursor.lastrowid
+        print(f"{user_role} {user_name}, the player, {player_name} has been added to the database successfully! Player ID is: {player_id}.")
         pass
     elif admin_role == "Equipment Manager":
         # Add a new Equipment
+        conn = get_connection()
+        cursor = conn.cursor()
+        equipment_name = input("Enter equipment name: ")
+        game_name = input(f"Enter the game that will use a {equipment_name}: ")
+        cursor.execute("INSERT INTO equipment (equipment_name, game_name) VALUES (?,?)", 
+                       (equipment_name, game_name))
+        conn.commit()
+        equipment_id = cursor.lastrowid
+        print(f"{user_role} {user_name}, the equipment, {equipment_name} has been added to the database successfully! Equipment ID is: {equipment_id}.")
         pass
     elif admin_role == "Coach Manager":
         # Hire a new Coach
+        conn = get_connection()
+        cursor = conn.cursor()
+        coach_name = input("Enter coach name: ")
+        year_of_birth = int(input("Enter your year of Birth: "))
+        gender = input("Enter your gender(F or M): ")
+        game_name = input(f"Which game will Coach {coach_name} be coaching: ")
+        cursor.execute("INSERT INTO coach (coach_name, year_of_birth, gender, game_name) VALUES (?,?,?,?)",
+                       (coach_name, year_of_birth, gender, game_name))
+        conn.commit()
+        coach_id = cursor.lastrowid
+        print(f"{user_role} {user_name}, the coach, {coach_name} has been added to the database successfully! Coach ID is: {coach_id}.")
         pass
 
 if __name__ == "__main__":
