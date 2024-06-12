@@ -7,4 +7,33 @@ class Equipment:
         self.game_id = game_id
 
     def __repr__(self):
+        return f"Equipment('{self.equipment_name}')"
         pass
+
+    @property
+    def equipment_id(self):
+        return self._equipment_id
+    
+    @equipment_id.setter
+    def equipment_id(self, equipment_id):
+        self._equipment_id = equipment_id
+
+    @property
+    def equipment_name(self):
+        return self._equipment_name
+    
+    @equipment_name.setter
+    def equipment_name(self, equipment_name):
+        self._equipment_name = equipment_name
+
+    @classmethod
+    def create_equipment(cls):
+        conn = get_connection()
+        cursor = conn.cursor()
+        equipment_name = input("Enter equipment name: ")
+        game_name = input(f"In which game will {equipment_name} be used?: ")
+        cursor.execute("INSERT INTO equipment (equipment_name, game_name) VALUES (?,?)",
+                       (equipment_name, game_name))
+        conn.commit()
+        equipment_id = cursor.lastrowid
+        print(f"Equipment created successfully! Equipment ID: {equipment_id}")

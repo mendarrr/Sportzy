@@ -1,5 +1,4 @@
 from db.connection import get_connection
-import sqlite3
 
 class Player:
     all = {}
@@ -29,45 +28,17 @@ class Player:
     def player_name(self, player_name):
         self._player_name = player_name
 
-    def save(self):
+    @classmethod
+    def create_player(cls):
         conn = get_connection()
         cursor = conn.cursor()
-        query = """
-            INSERT INTO players (player_name, year_of_birth, gender, game_id)
-            VALUES (?,?,?,?)
-        """
-        try:
-            cursor.execute(query, (self.player_name, self.year_of_birth, self.gender, self.game_id))
-            conn.commit()
-        except sqlite3.Error as error:
-            print(error)
-            conn.rollback()
-        finally:
-            cursor.close()
-            conn.close()
-
-    @classmethod
-    def create(cls, player_name):
-        player = cls(player_name)
-        player.save()
-        return player
-    
-    @classmethod
-    def all(cls):
-        conn = get_connection()
-        cursor = conn.cursor()
-        query = """
-            SELECT * FROM players
-        """
-        try:
-            cursor.execute(query)
-            players = cursor.fetchall()
-            return [Player(*player) for player in players]
-        except sqlite3.Error as error:
-            print(error)
-            conn.rollback()
-        finally:
-            cursor.close()
-            conn.close()
-
-    # Method that returns a list of players for a certain game
+        player_name = input("Enter player name: ")
+        year_of_birth = int(input("Enter the player's year of Birth: "))
+        gender = input("Enter your gender(F or M): ")
+        game_name = input(f"Which game will Player {player_name} be playing: ")
+        cursor.execute("INSERT INTO players (player_name, year_of_birth, gender, game_name) VALUES (?,?,?,?)",
+                       (player_name, year_of_birth, gender, game_name))
+        conn.commit()
+        player_id = cursor.lastrowid
+        print(f"Player created successfully! Player ID: {player_id}")
+        return cls(player_id, player_name, year_of_birth, gender, game_name)
