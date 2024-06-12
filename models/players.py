@@ -1,7 +1,15 @@
 from db.connection import get_connection
 
 class Player:
-    all = {}
+    # roles = {
+    #     [
+    #         'Scoring goals for a team',
+    #         'Preventing opposing team from scoring',
+    #         'Tackling the opposing team',
+    #         'Defending against the opposing team',
+    #         'Being a midfielder'
+    #     ]
+    # }
     def __init__(self, id, player_name, year_of_birth, gender, game_id):
         self.id = id
         self.player_name = player_name
@@ -42,3 +50,7 @@ class Player:
         player_id = cursor.lastrowid
         print(f"Player created successfully! Player ID: {player_id}")
         return cls(player_id, player_name, year_of_birth, gender, game_name)
+    
+    def display_player_roles(self):
+        for role in Player.roles:
+            print(f"{role}: {self.roles[role]}")

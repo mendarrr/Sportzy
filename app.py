@@ -27,6 +27,23 @@ def main():
 
     user_role = prompt_for_user_role()
     click.echo(f"Hey {user_role} {user_name}")
+    click.echo(f"This is a list of games played in sportzy")
+    if user_role == "player":
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT game_name FROM games")
+        games = cursor.fetchall()
+        for game in games:
+            click.echo(f"{game[0]}")
+        game_name = click.prompt("Which game would you like to join?", type=str)
+        cursor.execute("SELECT * FROM games WHERE game_name = ?", (game_name,))
+        game_details = cursor.fetchone()
+        if game_details:
+            click.echo(f"Game Name: {game_details[1]}")
+            click.echo(f"Number of Players per team: {game_details[2]}")  
+            click.echo(f"Game Coach: {game_details[3]}")
+    else:
+        click.echo("Game not found")
 
     if user_role == "admin":
         admin_role = prompt_for_admin_role()
