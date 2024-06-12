@@ -8,12 +8,11 @@ def create_tables():
     try:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS games(
-                       id INTEGER PRIMARY KEY AUTOINCREMENT,
-                       game_name TEXT,
-                       number_of_players INTEGER
-                       FOREIGN KEY(player_id) REFERENCES players(id)
-                       FOREIGN KEY(equipment_id) REFERENCES equipment(id)
-                       FOREIGN KEY(coach_id) REFERENCES coach(id)
+                       id INTEGER,
+                       game_name TEXT PRIMARY KEY,
+                       number_of_players INTEGER,
+                       coach_name TEXT,
+                       FOREIGN KEY(coach_name) REFERENCES coach(coach_name),
                        );
     """)
         
@@ -21,8 +20,8 @@ def create_tables():
             CREATE TABLE IF NOT EXISTS equipment(
                        id INTEGER PRIMARY KEY AUTOINCREMENT,
                        equipment_name TEXT,
-                       game_id INTEGER,
-                       FOREIGN KEY(game_id) REFERENCES games(id)
+                       game_name TEXT,
+                       FOREIGN KEY(game_name) REFERENCES games(game_name)
                        );
     """)
         
@@ -32,19 +31,19 @@ def create_tables():
                        player_name TEXT,
                        year_of_birth INTEGER,
                        gender TEXT,
-                       game_id INTEGER,
-                       FOREIGN KEY(game_id) REFERENCES games(id)
+                       game_name TEXT,
+                       FOREIGN KEY(game_name) REFERENCES games(game_name),
                        );
     """)
         
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS coaches(
-                       id INTEGER PRIMARY KEY AUTOINCREMENT,
-                       coach_name TEXT,
+                       id INTEGER,
+                       coach_name TEXT PRIMARY KEY,
                        year_of_birth INTEGER,
                        gender TEXT,
-                       game_id INTEGER,
-                       FOREIGN KEY(game_id) REFERENCES games(id)
+                       game_name TEXT,
+                       FOREIGN KEY(game_name) REFERENCES games(game_name),
                        );
 """)
         conn.commit()   
