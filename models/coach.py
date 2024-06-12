@@ -28,6 +28,7 @@ class Coach:
     def coach_name(self, coach_name):
         self._coach_name = coach_name
 
+    #Function to create a new row in the coach table
     @classmethod
     def create_coach(cls):
         conn = get_connection()
@@ -41,5 +42,14 @@ class Coach:
         conn.commit()
         coach_id = cursor.lastrowid
         print(f"Coach created successfully! Coach ID: {coach_id}")
+
+    # Function to get a coach object using the id
+    @classmethod
+    def get_coach_by_id(cls, coach_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM coach WHERE id =?", (coach_id,))
+        coach = cursor.fetchone()
+        return cls(coach[0], coach[1], coach[2], coach[3], coach[4])
 
     

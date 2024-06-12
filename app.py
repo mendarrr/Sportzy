@@ -76,24 +76,40 @@ def main():
             click.echo(f"The player chosen does not play {game_name}")
 
 
-    # Functionality for admin user role
     elif user_role == "admin":
         admin_role = prompt_for_admin_role()
-        conn = get_connection()
-        cursor = conn.cursor()
-    
-        # Map admin roles to their corresponding create functions
-        admin_role_functions = {
-            "games manager": Game.create_game,
-            "player manager": Player.create_player,
-            "equipment manager": Equipment.create_equipment,
-            "coach manager": Coach.create_coach,
-        }
-        
-        if admin_role in admin_role_functions:
-            admin_role_functions[admin_role]()
+        admin_action = click.prompt(f"What do you want to do?\n"
+        + "\n".join(f"  {choice}" for choice in ['Create', 'Get', 'Update', 'Delete']),
+        type=click.Choice(['Create', 'Get', 'Update', 'Delete']),
+        show_choices=False,
+        )
+
+    # Map admin roles to their corresponding create functions
+    admin_role_create_functions = {
+        "games manager": Game.create_game,
+        "player manager": Player.create_player,
+        "equipment manager": Equipment.create_equipment,
+        "coach manager": Coach.create_coach,
+    }
+    # Map admin roles to their corresponding get functions
+    admin_role_get_functions = {
+        "games manager": Game.get_game_by_name,
+        "player manager": Player.get_player_by_id,
+        "equipment manager": Equipment.get_equipment_by_id,
+        "coach manager": Coach.get_coach_by_id,
+    }
+
+    if admin_action.lower() == 'create':
+        if admin_role in admin_role_create_functions:
+            admin_role_create_functions[admin_role]()  # Call the create function with required arguments
         else:
             click.echo("Please enter a Valid admin role for Sportzy")
-
+    elif admin_action.lower() == 'get':
+        if admin_role in admin_role_get_functions:
+            admin_role_get_functions[admin_role]()  # Call the get function with required arguments
+        else:
+            click.echo("Please enter a Valid admin role for Sportzy")
+    else:
+        click.echo("Invalid action. Please choose Create or Get.")
 if __name__ == "__main__":
     main()

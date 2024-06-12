@@ -1,15 +1,6 @@
 from db.connection import get_connection
 
 class Player:
-    # roles = {
-    #     [
-    #         'Scoring goals for a team',
-    #         'Preventing opposing team from scoring',
-    #         'Tackling the opposing team',
-    #         'Defending against the opposing team',
-    #         'Being a midfielder'
-    #     ]
-    # }
     def __init__(self, id, player_name, year_of_birth, gender, game_id):
         self.id = id
         self.player_name = player_name
@@ -36,6 +27,7 @@ class Player:
     def player_name(self, player_name):
         self._player_name = player_name
 
+    # Function to create a new row for player table
     @classmethod
     def create_player(cls):
         conn = get_connection()
@@ -50,6 +42,15 @@ class Player:
         player_id = cursor.lastrowid
         print(f"Player created successfully! Player ID: {player_id}")
         return cls(player_id, player_name, year_of_birth, gender, game_name)
+    
+    # Function to retrieve a player object using id
+    @classmethod
+    def get_player_by_id(cls, player_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM players WHERE id =?", (player_id,))
+        player = cursor.fetchone()
+        return cls(player[0], player[1], player[2], player[3], player[4])
     
     def display_player_roles(self):
         for role in Player.roles:

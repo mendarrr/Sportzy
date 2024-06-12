@@ -28,6 +28,7 @@ class Game:
     def player_name(self, player_name):
         self._player_name = player_name
 
+    # Function to create a new row in the Game table
     @classmethod
     def create_game(cls):
         conn = get_connection()
@@ -41,5 +42,14 @@ class Game:
         game_id = cursor.lastrowid
         print(f"Game created successfully! Game ID: {game_id}")
         return cls(game_id, game_name, number_of_players, None, coach_name)
+    
+    # Function to retrieve a game object using the name
+    @classmethod
+    def get_game_by_name(cls, game_name):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM games WHERE game_name =?", (game_name,))
+        game = cursor.fetchone()
+        return cls(game[0], game[1], game[2], game[3], game[4])
 
     

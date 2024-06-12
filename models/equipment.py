@@ -26,6 +26,7 @@ class Equipment:
     def equipment_name(self, equipment_name):
         self._equipment_name = equipment_name
 
+    #F unction to create a new row in the Equipment table
     @classmethod
     def create_equipment(cls):
         conn = get_connection()
@@ -37,3 +38,12 @@ class Equipment:
         conn.commit()
         equipment_id = cursor.lastrowid
         print(f"Equipment created successfully! Equipment ID: {equipment_id}")
+
+    # Function to get an equipment object usind the id
+    @classmethod
+    def get_equipment_by_id(cls, equipment_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM equipment WHERE id =?", (equipment_id,))
+        equipment = cursor.fetchone()
+        return cls(equipment[0], equipment[1], equipment[2])
