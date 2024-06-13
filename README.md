@@ -23,6 +23,10 @@ Sportzy is a CLI application that allows its users to add, update, and remove sp
 1. Run the app: python3 App.py
 
 ### Usage
+Once the App is running, run the following commands in the terminal:
+1. python3 app.py player
+2. python3 app.py equipment
+3. python3 app.py coach
 
 ## LIVE SITE
 
