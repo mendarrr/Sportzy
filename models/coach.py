@@ -52,4 +52,27 @@ class Coach:
         coach = cursor.fetchone()
         return cls(coach[0], coach[1], coach[2], coach[3], coach[4])
 
+    # Function to delete a record from the coach table
+    def delete_coach(coach_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM coach WHERE id =?", (coach_id,))
+        conn.commit()
+        print(f"Coach with id {coach_id} has been deleted successfully!")
+
+    # Function that updates the contents of a coach table
+    @classmethod
+    def update_coach(cls, coach_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM coach WHERE id =?", (coach_id,))
+        coach = cursor.fetchone()
+        print(coach)
+        coach_name = input("Enter coach name: ")
+        year_of_birth = int(input("Enter your year of Birth: "))
+        gender = input("Enter your gender(F or M): ")
+        game_name = input(f"Which game will Coach {coach_name} be coaching: ")
+        cursor.execute("UPDATE coach SET coach_name =?, year_of_birth =?, gender =?, game_name =? WHERE id =?",
+                       (coach_name, year_of_birth, gender, game_name, coach_id))
+        conn.commit()
     

@@ -44,14 +44,33 @@ class Player:
         return cls(player_id, player_name, year_of_birth, gender, game_name)
     
     # Function to retrieve a player object using id
-    @classmethod
-    def get_player_by_id(cls, player_id):
+    def get_player_by_id(player_id):
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM players WHERE id =?", (player_id,))
         player = cursor.fetchone()
-        return cls(player[0], player[1], player[2], player[3], player[4])
     
-    def display_player_roles(self):
-        for role in Player.roles:
-            print(f"{role}: {self.roles[role]}")
+    # Function to delete a record from the players table
+    def delete_player(player_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM players WHERE id =?", (player_id,))
+        conn.commit()
+        print(f"Player with id {player_id} has been deleted successfully!")
+
+    # Function that Updates the contents of player table
+    @classmethod
+    def update_player(cls, player_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM players WHERE id =?", (player_id,))
+        player = cursor.fetchone()
+        print(player)
+        player_name = input("Enter player name: ")
+        year_of_birth = int(input("Enter the player's year of Birth: "))
+        gender = input("Enter your gender(F or M): ")
+        game_name = input(f"Which game will Player {player_name} be playing: ")
+        cursor.execute("UPDATE players SET player_name =?, year_of_birth =?, gender =?, game_name =? WHERE id =?",
+                       (player_name, year_of_birth, gender, game_name, player_id))
+        conn.commit()
+        print(f"Player with id {player_id} has been updated successfully!")

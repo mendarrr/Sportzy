@@ -79,7 +79,7 @@ def main():
     elif user_role == "admin":
         admin_role = prompt_for_admin_role()
         admin_action = click.prompt(f"What do you want to do?\n"
-        + "\n".join(f"  {choice}" for choice in ['Create', 'Get', 'Update', 'Delete']),
+        + "\n".join(f"  {choice}" for choice in ['Create', 'Get', 'Delete']),
         type=click.Choice(['Create', 'Get', 'Update', 'Delete']),
         show_choices=False,
         )
@@ -91,25 +91,34 @@ def main():
         "equipment manager": Equipment.create_equipment,
         "coach manager": Coach.create_coach,
     }
-    # Map admin roles to their corresponding get functions
-    admin_role_get_functions = {
-        "games manager": Game.get_game_by_name,
-        "player manager": Player.get_player_by_id,
-        "equipment manager": Equipment.get_equipment_by_id,
-        "coach manager": Coach.get_coach_by_id,
-    }
 
     if admin_action.lower() == 'create':
         if admin_role in admin_role_create_functions:
-            admin_role_create_functions[admin_role]()  # Call the create function with required arguments
+            admin_role_create_functions[admin_role]()  
         else:
             click.echo("Please enter a Valid admin role for Sportzy")
-    elif admin_action.lower() == 'get':
-        if admin_role in admin_role_get_functions:
-            admin_role_get_functions[admin_role]()  # Call the get function with required arguments
-        else:
-            click.echo("Please enter a Valid admin role for Sportzy")
+
+    if admin_action.lower() == "delete":
+        if admin_role == "games manager":
+            game_id = input("Enter the ID of the game to be removed from Sportzy: ")
+            Game.delete_game(game_id)
+            pass
+        elif admin_role == "player manager":
+            player_id = input("Enter the ID of the player to be removed from Sportzy: ")
+            Player.delete_player(player_id)
+            pass
+        elif admin_role == "equipment manager":
+            equipment_id = input("Enter the ID of the equipment to be removed from Sportzy: ")
+            Equipment.delete_equipment(equipment_id)
+            pass
+        elif admin_role == "coach manager":
+            coach_id = input("Enter the ID of the coach to be removed from Sportzy: ")
+            Coach.delete_coach(coach_id)
+            pass
+
     else:
-        click.echo("Invalid action. Please choose Create or Get.")
+        click.echo("Please enter a Valid admin role for Sportzy")
+
+
 if __name__ == "__main__":
     main()

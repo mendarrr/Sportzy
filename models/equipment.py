@@ -47,3 +47,26 @@ class Equipment:
         cursor.execute("SELECT * FROM equipment WHERE id =?", (equipment_id,))
         equipment = cursor.fetchone()
         return cls(equipment[0], equipment[1], equipment[2])
+    
+    # Function to delete a record from the equipment table
+    def delete_equipment(equipment_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM equipment WHERE id =?", (equipment_id,))
+        conn.commit()
+        print(f"Equipment with id {equipment_id} has been deleted successfully!")
+
+    # Function that updates the contents of an equipment table
+    @classmethod
+    def update_equipment(cls, equipment_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM equipment WHERE id =?", (equipment_id,))
+        equipment = cursor.fetchone()
+        print(equipment)
+        equipment_name = input("Enter equipment name: ")
+        game_name = input(f"In which game will {equipment_name} be used?: ")
+        cursor.execute("UPDATE equipment SET equipment_name =?, game_name =? WHERE id =?",
+                       (equipment_name, game_name, equipment_id))
+        conn.commit()
+        print(f"Equipment with id {equipment_id} has been updated successfully!")

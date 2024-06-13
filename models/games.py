@@ -51,5 +51,29 @@ class Game:
         cursor.execute("SELECT * FROM games WHERE game_name =?", (game_name,))
         game = cursor.fetchone()
         return cls(game[0], game[1], game[2], game[3], game[4])
+    
+    # Function to delete a record from the games table
+    def delete_game(game_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM games WHERE id =?", (game_id,))
+        conn.commit()
+        print(f"Game with id {game_id} has been deleted successfully!")
+
+    # Function that updates the contents of a games table
+    @classmethod
+    def update_game(cls, game_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM games WHERE id =?", (game_id,))
+        game = cursor.fetchone()
+        print(game)
+        game_name = input("Enter game name: ")
+        number_of_players = int(input("Enter number of players: "))
+        coach_name = input("Enter coach name: ")
+        cursor.execute("UPDATE games SET game_name =?, number_of_players =?, coach_name =? WHERE id =?",
+                       (game_name, number_of_players, coach_name, game_id))
+        conn.commit()
+        print(f"Game with id {game_id} has been updated successfully!")
 
     
