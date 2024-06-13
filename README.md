@@ -11,6 +11,31 @@ Sportzy is a CLI application that allows its users to add, update, and remove sp
 1. Python 3.8 or higher
 2. SQLite 3 or higher
 
+### Project Structure
+|Sportzy/
+    |db/
+        |__init__.py
+        |connection.py
+        |setup.py
+
+    |models/
+        |__init__.py
+        |admin.py
+        |coach.py
+        |equipment.py
+        |games.py
+        |players.py
+
+|__init__.py
+|app.py
+|Pipfile
+|Pipfile.lock
+|click
+|README.md
+|sports.db
+    
+    
+
 ### Installation
 1. Clone the repository
 2. Install the required modules using pip
