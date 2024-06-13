@@ -11,8 +11,8 @@ class Admin:
     def prompt_admin_for_action(self):
         print("")
         admin_action = click.prompt(f"What do you want to do?\n"
-            + "\n".join(f"  {choice}" for choice in ['Create', 'Find By Id', 'Get all', 'Delete']),
-            type=click.Choice(['Create', 'Find By Id', 'Get all', 'Delete']),
+            + "\n".join(f"  {choice}" for choice in ['Create', 'Find By Id', 'Get all', 'Delete', 'Update']),
+            type=click.Choice(['Create', 'Find By Id', 'Get all', 'Delete', 'Update']),
             show_choices=False,
         )
         return admin_action
@@ -26,6 +26,8 @@ class Admin:
             self.manage_find_by_id()
         elif admin_action.lower() == "get all":
             self.manage_get_all()
+        elif admin_action.lower() == "update":
+            self.manage_update()
 
     # Adding new records to tables
     def manage_create(self):
@@ -172,3 +174,25 @@ class Admin:
                 print("Age:", coach["age"])
                 print("")
                 pass
+             
+    def manage_update(self):
+        if self.admin_role == "coach manager":
+            print("")
+            coach_id = input("Enter the ID of the coach you want to update: ")
+            click.echo("Fill all the inputs to update the record in the database")
+            print("")
+            coach_name = input("Enter the name of the coach: ")
+            year_of_birth = input("Enter the year of birth of the coach: ")
+            gender = input("Enter the gender of the coach: ")
+            age = input("Enter the age of the coach: ")
+            game_name = input("Enter the game name of the coach: ")
+            Coach.update_coach(coach_id, coach_name, year_of_birth, gender, age, game_name)
+
+        elif self.admin_role == "equipment manager":
+            print("")
+            click.echo("Enter the ID of the equipment you want to update")
+            equipment_id = input("Enter the ID of the equipment you want to update: ")
+            click.echo("Fill all the inputs to update the record in the database")
+            equipment_name = input("Enter the name of the equipment: ")
+            game_name = input("Enter the game name of the equipment: ")
+            Equipment.update_equipment(equipment_id, equipment_name, game_name)

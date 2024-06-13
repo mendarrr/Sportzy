@@ -75,3 +75,11 @@ class Coach:
             coach_dict = dict(zip(column_names, coach))
             result.append(coach_dict)
         return result
+    
+    def update_coach(coach_id, coach_name, year_of_birth, gender, age, game_name):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE coach SET coach_name = ?, year_of_birth = ?, gender = ?, age = ?, game_name = ? WHERE id = ?",
+                       (coach_name, year_of_birth, gender, age, game_name, coach_id))
+        conn.commit()
+        print(f"Coach with id {coach_id} has been updated successfully!")

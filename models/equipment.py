@@ -71,3 +71,11 @@ class Equipment:
             equipment_dict = dict(zip(column_names, equipment))
             result.append(equipment_dict)
         return result
+    
+    def update_equipment(equipment_name, equipment_id, game_name):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE equipment SET equipment_name = ?, game_name = ? WHERE id = ?",
+                       (equipment_name, game_name, equipment_id))
+        conn.commit()
+        print(f"Equipment with id {equipment_id} has been updated successfully!")
