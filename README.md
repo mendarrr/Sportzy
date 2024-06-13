@@ -34,8 +34,6 @@ Sportzy is a CLI application that allows its users to add, update, and remove sp
 |README.md
 |sports.db
     
-    
-
 ### Installation
 1. Clone the repository
 2. Install the required modules using pip
