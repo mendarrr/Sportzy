@@ -49,6 +49,12 @@ class Player:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM players WHERE id =?", (player_id,))
         player = cursor.fetchone()
+        if player:
+            return list(player)
+            
+        else:
+            return None
+
     
     # Function to delete a record from the players table
     def delete_player(player_id):

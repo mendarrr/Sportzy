@@ -44,13 +44,16 @@ class Game:
         return cls(game_id, game_name, number_of_players, None, coach_name)
     
     # Function to retrieve a game object using the name
-    @classmethod
-    def get_game_by_name(cls, game_name):
+    def get_game_by_id(game_id):
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM games WHERE game_name =?", (game_name,))
+        cursor.execute("SELECT * FROM games WHERE id =?", (game_id,))
         game = cursor.fetchone()
-        return cls(game[0], game[1], game[2], game[3], game[4])
+        if game:
+            return list(game)
+            
+        else:
+            return None
     
     # Function to delete a record from the games table
     def delete_game(game_id):

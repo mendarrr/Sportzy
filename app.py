@@ -79,8 +79,8 @@ def main():
     elif user_role == "admin":
         admin_role = prompt_for_admin_role()
         admin_action = click.prompt(f"What do you want to do?\n"
-        + "\n".join(f"  {choice}" for choice in ['Create', 'Get', 'Delete']),
-        type=click.Choice(['Create', 'Get', 'Update', 'Delete']),
+        + "\n".join(f"  {choice}" for choice in ['Create', 'Find By Id', 'Get all', 'Delete']),
+        type=click.Choice(['Create', 'Find By Id', 'Get all', 'Update', 'Delete']),
         show_choices=False,
         )
 
@@ -114,6 +114,48 @@ def main():
         elif admin_role == "coach manager":
             coach_id = input("Enter the ID of the coach to be removed from Sportzy: ")
             Coach.delete_coach(coach_id)
+            pass
+
+    if admin_action.lower() == "find by id":
+        if admin_role == "games manager":
+            game_id = input("Enter the ID of the game to get details of: ")
+            game_details = Game.get_game_by_id(game_id)
+            if game_details:
+                click.echo(f"These are the details for game with id {game_id}")
+                print(f"ID: {game_details[0]}")
+                print(f"Name: {game_details[1]}")
+                print(f"Number of Players per team: {game_details[2]}")
+                print(f"Game Coach: {game_details[3]}")
+            pass
+        elif admin_role == "player manager":
+            player_id = input("Enter the ID of the player to get details of: ")
+            player_details = Player.get_player_by_id(player_id)
+            if player_details:
+                click.echo(f"These are the details for player with id {player_id}")
+                print(f"ID: {player_details[0]}")
+                print(f"Name: {player_details[1]}")
+                print(f"Age: {player_details[5]}")
+                print(f"Gender: {player_details[3]}")
+            pass
+        elif admin_role == "equipment manager":
+            equipment_id = input("Enter the ID of the equipment to get details of: ")
+            equipment_details = Equipment.get_equipment_by_id(equipment_id)
+            if equipment_details:
+                click.echo(f"These are the details for equipment with id {equipment_id}")
+                print(f"ID: {equipment_details[0]}")
+                print(f"Name: {equipment_details[1]}")
+                print(f"Game Name: {equipment_details[2]}")
+            pass
+        elif admin_role == "coach manager":
+            coach_id = input("Enter the ID of the coach to get details of: ")
+            coach_details = Coach.get_coach_by_id(coach_id)
+            if coach_details:
+                click.echo(f"These are the details for coach with id {coach_id}")
+                print(f"ID: {coach_details[0]}")
+                print(f"Name: {coach_details[1]}")
+                print(f"Year of Birth: {coach_details[2]}")
+                print(f"Gender: {coach_details[3]}")
+                print(f"Game Name: {coach_details[4]}")
             pass
 
     else:

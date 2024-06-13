@@ -44,13 +44,16 @@ class Coach:
         print(f"Coach created successfully! Coach ID: {coach_id}")
 
     # Function to get a coach object using the id
-    @classmethod
-    def get_coach_by_id(cls, coach_id):
+    def get_coach_by_id(coach_id):
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM coach WHERE id =?", (coach_id,))
         coach = cursor.fetchone()
-        return cls(coach[0], coach[1], coach[2], coach[3], coach[4])
+        if coach:
+            return list(coach)
+            
+        else:
+            return None
 
     # Function to delete a record from the coach table
     def delete_coach(coach_id):

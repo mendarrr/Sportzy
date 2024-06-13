@@ -40,13 +40,16 @@ class Equipment:
         print(f"Equipment created successfully! Equipment ID: {equipment_id}")
 
     # Function to get an equipment object usind the id
-    @classmethod
-    def get_equipment_by_id(cls, equipment_id):
+    def get_equipment_by_id(equipment_id):
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM equipment WHERE id =?", (equipment_id,))
         equipment = cursor.fetchone()
-        return cls(equipment[0], equipment[1], equipment[2])
+        if equipment:
+            return list(equipment)
+            
+        else:
+            return None
     
     # Function to delete a record from the equipment table
     def delete_equipment(equipment_id):
