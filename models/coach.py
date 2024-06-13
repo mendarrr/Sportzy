@@ -64,18 +64,14 @@ class Coach:
         print(f"Coach with id {coach_id} has been deleted successfully!")
 
     # Function that updates the contents of a coach table
-    @classmethod
-    def update_coach(cls, coach_id):
+    def get_all_coaches():
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM coach WHERE id =?", (coach_id,))
-        coach = cursor.fetchone()
-        print(coach)
-        coach_name = input("Enter coach name: ")
-        year_of_birth = int(input("Enter your year of Birth: "))
-        gender = input("Enter your gender(F or M): ")
-        game_name = input(f"Which game will Coach {coach_name} be coaching: ")
-        cursor.execute("UPDATE coach SET coach_name =?, year_of_birth =?, gender =?, game_name =? WHERE id =?",
-                       (coach_name, year_of_birth, gender, game_name, coach_id))
-        conn.commit()
-    
+        cursor.execute("SELECT * FROM coach")
+        coaches = cursor.fetchall()
+        column_names = [desc[0] for desc in cursor.description]
+        result = []
+        for coach in coaches:
+            coach_dict = dict(zip(column_names, coach))
+            result.append(coach_dict)
+        return result

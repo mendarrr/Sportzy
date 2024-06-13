@@ -60,16 +60,14 @@ class Equipment:
         print(f"Equipment with id {equipment_id} has been deleted successfully!")
 
     # Function that updates the contents of an equipment table
-    @classmethod
-    def update_equipment(cls, equipment_id):
+    def get_all_equipment():
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM equipment WHERE id =?", (equipment_id,))
-        equipment = cursor.fetchone()
-        print(equipment)
-        equipment_name = input("Enter equipment name: ")
-        game_name = input(f"In which game will {equipment_name} be used?: ")
-        cursor.execute("UPDATE equipment SET equipment_name =?, game_name =? WHERE id =?",
-                       (equipment_name, game_name, equipment_id))
-        conn.commit()
-        print(f"Equipment with id {equipment_id} has been updated successfully!")
+        cursor.execute("SELECT * FROM equipment")
+        equipment = cursor.fetchall()
+        column_names = [desc[0] for desc in cursor.description]
+        result = []
+        for equipment in equipment:
+            equipment_dict = dict(zip(column_names, equipment))
+            result.append(equipment_dict)
+        return result

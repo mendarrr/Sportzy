@@ -64,19 +64,15 @@ class Game:
         print(f"Game with id {game_id} has been deleted successfully!")
 
     # Function that updates the contents of a games table
-    @classmethod
-    def update_game(cls, game_id):
+    def get_all_games():
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM games WHERE id =?", (game_id,))
-        game = cursor.fetchone()
-        print(game)
-        game_name = input("Enter game name: ")
-        number_of_players = int(input("Enter number of players: "))
-        coach_name = input("Enter coach name: ")
-        cursor.execute("UPDATE games SET game_name =?, number_of_players =?, coach_name =? WHERE id =?",
-                       (game_name, number_of_players, coach_name, game_id))
-        conn.commit()
-        print(f"Game with id {game_id} has been updated successfully!")
-
+        cursor.execute("SELECT * FROM games")
+        games = cursor.fetchall()
+        column_names = [desc[0] for desc in cursor.description]
+        result = []
+        for player in games:
+            game_dict = dict(zip(column_names, player))
+            result.append(game_dict)
+        return result
     

@@ -55,7 +55,6 @@ class Player:
         else:
             return None
 
-    
     # Function to delete a record from the players table
     def delete_player(player_id):
         conn = get_connection()
@@ -64,19 +63,16 @@ class Player:
         conn.commit()
         print(f"Player with id {player_id} has been deleted successfully!")
 
-    # Function that Updates the contents of player table
-    @classmethod
-    def update_player(cls, player_id):
+    # Function that retrieves all the contents of player table
+    def get_all_players():
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM players WHERE id =?", (player_id,))
-        player = cursor.fetchone()
-        print(player)
-        player_name = input("Enter player name: ")
-        year_of_birth = int(input("Enter the player's year of Birth: "))
-        gender = input("Enter your gender(F or M): ")
-        game_name = input(f"Which game will Player {player_name} be playing: ")
-        cursor.execute("UPDATE players SET player_name =?, year_of_birth =?, gender =?, game_name =? WHERE id =?",
-                       (player_name, year_of_birth, gender, game_name, player_id))
-        conn.commit()
-        print(f"Player with id {player_id} has been updated successfully!")
+        cursor.execute("SELECT * FROM players")
+        players = cursor.fetchall()
+        column_names = [desc[0] for desc in cursor.description]
+        result = []
+        for player in players:
+            player_dict = dict(zip(column_names, player))
+            result.append(player_dict)
+        return result
+    
